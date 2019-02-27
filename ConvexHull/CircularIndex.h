@@ -4,7 +4,7 @@
 class CircularIndex
 {
 public:
-	explicit CircularIndex(int _length, int _start = 0, int _offset = 0)  //_length是模，也即offset的数量，_start是最小的offset值，_offset给定相对_start的偏移
+	explicit CircularIndex(int _length, int _start = 0, int _offset = 0)  //_length是模，也即index的数量，_start是最小的index值，_offset给定相对_start的偏移
 	{
 		start = _start;
 		length = _length;
@@ -79,7 +79,7 @@ public:
 		return _temp;
 	}
 
-	operator int() const { return start + offset; }
+	operator int() const { return start + offset; }   //当成int用
 
 protected:
 private:

@@ -30,7 +30,7 @@ int main()
 // 		cout << (*it)[0] << " " << (*it)[1] << endl;
 // 	}
 
-// 	CircularIndex ci(10, 1);
+// 	CircularIndex ci(10, 0, 1);
 // 	for (int i = 0; i < 1000; i++)
 // 	{
 // 		static int a = 0;

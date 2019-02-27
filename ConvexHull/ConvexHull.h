@@ -128,25 +128,25 @@ namespace ConvexHull
 	}
 
 	//给定凸包上的一条边，找到凸包上到此边距离最远的点
-	//_set为凸包，推荐使用getConvexHull函数的返回结果，或者保证凸包中的点逆时针排序,且不存在共线的点
+	//_set为凸包，推荐使用getConvexHull函数的返回结果(或者保证凸包中的点逆时针排序,且不存在共线的点)
 	//_start是线段的起点索引，终点是下一个点，_set最后一个点的下一个点是第一个点
 	//_result记录结果，相同结果按照逆时针顺序以此记录
 	//返回值为距离，返回值为负表示计算失败
-	float getFarthestPointToEgde(const vector<Vec2f>& _set, const int _start, vector<Vec2f>& _result)
-	{
-		float _ret = -1;
-		int _size = _set.size();
-		if (_size < 3 || _start >= _size || _start < 0) return _ret;
-
-		int _end = _start == (_size - 1) ? 0 : (_start + 1);
-		Vec2f _edge = _set[_end] - _set[_start];
-
-		int i = _start + _size / 2; //由于是逆时针排序的凸包，从_end开始逆时针判定，距离必定先增后减，取折半位置开始判定
-		while (1)    
-		{
-
-		}
-	}
+// 	float getFarthestPointToEgde(const vector<Vec2f>& _set, const int _start, vector<Vec2f>& _result)
+// 	{
+// 		float _ret = -1;
+// 		int _size = _set.size();
+// 		if (_size < 3 || _start >= _size || _start < 0) return _ret;
+// 
+// 		int _end = _start == (_size - 1) ? 0 : (_start + 1);
+// 		Vec2f _edge = _set[_end] - _set[_start];
+// 
+// 		CircularIndex _ci(_size, 0, _size / 2) //由于是逆时针排序的凸包，从_end开始逆时针判定，距离必定先增后减，取折半位置开始判定
+// 		while (1)    
+// 		{
+// 
+// 		}
+// 	}
 }
 
 #endif
