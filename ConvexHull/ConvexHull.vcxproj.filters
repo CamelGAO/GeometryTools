@@ -18,6 +18,21 @@
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ConvexHull.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RotatingCaliper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CircularIndex.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

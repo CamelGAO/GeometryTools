@@ -151,7 +151,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CircularIndex.h" />
+    <ClInclude Include="ConvexHull.h" />
+    <ClInclude Include="Math.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="RotatingCaliper.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConvexHull.cpp" />

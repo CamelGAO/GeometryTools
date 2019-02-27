@@ -3,10 +3,44 @@
 
 #include "pch.h"
 #include <iostream>
+#include <vector>
+#include "ConvexHull.h"
+#include "CircularIndex.h"
+
+using namespace std;
+using namespace Vector;
+using namespace Math;
+using namespace ConvexHull;
 
 int main()
 {
-    std::cout << "Hello World!\n"; 
+// 	vector<Vec2f> in, out;
+// 	  
+// 	in.push_back(Vec2f(0, -1));
+// 	in.push_back(Vec2f(1, 0));
+// 	in.push_back(Vec2f(0, 1));
+// 	in.push_back(Vec2f(-1, 0));
+// 	in.push_back(Vec2f(0.5, 0.5));
+// 	in.push_back(Vec2f(-2.0, 0));
+// 
+// 	ConvexHull::getConvexHull(in, out);
+// 
+// 	for (vector<Vec2f>::iterator it = out.begin(); it != out.end(); it++)
+// 	{
+// 		cout << (*it)[0] << " " << (*it)[1] << endl;
+// 	}
+
+// 	CircularIndex ci(10, 1);
+// 	for (int i = 0; i < 1000; i++)
+// 	{
+// 		static int a = 0;
+// 	
+// 		cout << i << " " << ci << endl;
+// 
+// 		ci -= 101;
+// 	}
+
+	return 0;
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
