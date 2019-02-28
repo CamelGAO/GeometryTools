@@ -193,11 +193,56 @@ namespace ConvexHull
 		return _ret;
 	}
 
+	float getFarthestPointToEgde(const vector<Vec2f>& _set, const int _start, Vec2f& _result)
+	{
+		float _ret = -1;
+		int _size = _set.size();
+		if (_size < 3 || _start >= _size || _start < 0) return _ret;
+
+		CircularIndex _edgeStartIndex(_size, 0, _start);
+		Vec2f _edgeStartPoint = _set[_edgeStartIndex];
+		Vec2f _edgeVector = _set[_edgeStartIndex + 1] - _edgeStartPoint;
+
+		int _direction = 1; //1为逆时针移动  -1为顺时针移动 ，首先逆时针运动
+		CircularIndex _ci(_size, 0, _size / 2 + _start); //由于是逆时针排序的凸包，从_end开始逆时针判定，距离必定先增后减，取折半位置开始判定
+		while (1)
+		{
+			Vec2f _currentPoint(_set[_ci]);
+			Vec2f _nextPoint(_set[_ci + _direction]);
+
+			float _currentArea = abs(_edgeVector.cross(_currentPoint - _edgeStartPoint));
+			float _nextArea = abs(_edgeVector.cross(_nextPoint - _edgeStartPoint));
+
+			int _sign = sign(_nextArea - _currentArea);
+
+			if (_sign > 0)   //不管什么方向，发现面积上升，继续运动
+			{
+				_ci += _direction;
+				continue;
+			}
+			if (_sign < 0)
+			{
+				if (_direction == 1)   //逆时针发现面积下降，换方向
+				{
+					_direction = -1;
+					continue;
+				}
+				break;     //顺时针发现面积下降，结束，输出当前顶点
+			}
+			break;
+		}
+
+		_result = _set[_ci];
+
+		_ret = abs(_edgeVector.cross(_set[_ci] - _edgeStartPoint)) / _edgeVector.length();
+		return _ret;
+	}
+
 	//给定凸包上的一条边，找到凸包在给定方向上的宽度
 	//_set为凸包，推荐使用getConvexHull函数的返回结果(或者保证凸包中的点逆时针排序,且不存在共线的点)
-	//_vec表示方向
+	//_vec表示方向,用于计算此方向上的宽度
 	//返回值为宽度，宽度为负表示计算失败
-	float getConvexHullWidthInDirection(const vector<Vec2f>& _set, const Vec2f& _vec)
+	float getConvexHullWidth(const vector<Vec2f>& _set, const Vec2f& _vec)
 	{
 		float _ret = -1;
 		int _size = _set.size();
@@ -213,6 +258,36 @@ namespace ConvexHull
 		float _minDot = *min_element(_dotResult.begin(), _dotResult.end());
 		float _maxDot = *max_element(_dotResult.begin(), _dotResult.end());
 
+		_ret = (_maxDot - _minDot) / _vec.length();
+		return _ret;
+	}
+
+	//给定凸包上的一条边，找到凸包在给定方向上的宽度
+	//_set为凸包，推荐使用getConvexHull函数的返回结果(或者保证凸包中的点逆时针排序,且不存在共线的点)
+	//_vec表示方向,用于计算此方向上的宽度
+	//_upStreamPoint，_downStreamPoint分别记录在给定方向上游的决定点和下游的决定点。可能不唯一，但不会超过两个，此处只记录一个。
+	//返回值为宽度，宽度为负表示计算失败
+	float getConvexHullWidth(const vector<Vec2f>& _set, const Vec2f& _vec, Vec2f& _upStreamPoint, Vec2f& _downStreamPoint)
+	{
+		float _ret = -1;
+		int _size = _set.size();
+		if (_size < 3) return _ret;
+
+		vector<float> _dotResult;
+		for (vector<Vec2f>::const_iterator it = _set.begin(); it != _set.end(); it++)
+		{
+			float _dot = (*it).dot(_vec);
+			_dotResult.push_back(_dot);
+		}
+
+		vector<float>::iterator _minDotIterator = min_element(_dotResult.begin(), _dotResult.end());
+		vector<float>::iterator _maxDotIterator = max_element(_dotResult.begin(), _dotResult.end());
+
+		_upStreamPoint = _set[_minDotIterator - _dotResult.begin()];
+		_downStreamPoint = _set[_maxDotIterator - _dotResult.begin()];
+
+		float _minDot = *_minDotIterator;
+		float _maxDot = *_maxDotIterator;
 		_ret = (_maxDot - _minDot) / _vec.length();
 		return _ret;
 	}

@@ -1,14 +1,15 @@
 #ifndef _CIRCULARINDEX_H
 #define _CIRCULARINDEX_H
 
-class CircularIndex
+class CircularIndex     //数组下标循环，不用担心越界，用于循环访问
 {
 public:
 	explicit CircularIndex(int _length, int _start = 0, int _offset = 0)  //_length是模，也即index的数量，_start是最小的index值，_offset给定相对_start的偏移
 	{
 		start = _start;
 		length = _length;
-		offset = _offset;
+		offset = 0;
+		offsetAdd(_offset);
 	}
 
 	CircularIndex(const CircularIndex& _temp)

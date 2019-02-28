@@ -10,11 +10,21 @@ namespace Vector2D
 	{
 	public:
 		Vec2(void) {}
-		Vec2(const T& _x, const T& _y) { data[0] = _x; data[1] = _y; }
+
+		Vec2(const T& _x, const T& _y) {data[0] = _x; data[1] = _y;}
+
 		Vec2(const Vec2<typename T>& _vec)
 		{
 			for (size_t i = 0; i < 2; i++)
 				data[i] = _vec.data[i];
+		}
+
+		Vec2& operator = (const Vec2& _vec)
+		{
+			for (size_t i = 0; i < 2; i++)
+				data[i] = _vec.data[i];
+
+			return *this;
 		}
 
 		T& operator[] (int _i)
@@ -91,9 +101,9 @@ namespace Vector2D
 			return dot(*this);
 		}
 
+		T data[2];
 	protected:
 	private:
-		T data[2];
 	};
 
 	template<typename T>

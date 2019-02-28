@@ -7,12 +7,14 @@
 #include "ConvexHull.h"
 #include "CircularIndex.h"
 #include "RotatingCaliper.h"
+#include "Line2D.h"
 
 using namespace std;
 using namespace Vector2D;
 using namespace Math;
 using namespace ConvexHull;
 using namespace RotatingCaliper;
+using namespace Line2D;
 
 int main()
 {
@@ -39,7 +41,30 @@ int main()
 		cout << "farthest point: " << (*it)[0] << " " << (*it)[1] << endl;
 	}
 
-	cout << "ConvexHull width: " << getConvexHullWidthInDirection(out, out[1] - out[0]) << endl;
+	Vec2f up, down;
+	cout << "ConvexHull width: " << getConvexHullWidth(out, out[1] - out[0], up, down) << endl;
+	cout << "Upstream Point: " << up[0] << " " << up[1] << endl;
+	cout << "Downstream Point: " << down[0] << " " << down[1] << endl;
+
+	Vec2f p;
+	Line2f l1(Vec2f(1, 0), Vec2f(1, 1));
+	Line2f l2(Vec2f(2, 1), Vec2f(-2, -1));
+	if (l1.getCrossoverPoint(l2, p))
+		cout << "Crossover Point: " << p[0] << " " << p[1] << endl;
+	else
+		cout << "Parallel!" << endl;
+
+	Vec2f p1(0,1), p2;
+	Line2f l3( Vec2f(-2, -1), Vec2f(2, 1) );
+	l3.getFootPoint(p1, p2);
+	cout << "Foot Point: " << p2[0] << " " << p2[1] << endl;
+
+	vector<Vec2f> rect;
+	cout << "MaxArea: " << getMinAreaBoundingRectOfConvexHull(out, rect) << endl;
+	for (vector<Vec2f>::iterator it = rect.begin(); it != rect.end(); it++)
+	{
+		cout << "rect point: " << (*it)[0] << " " << (*it)[1] << endl;
+	}
 
 // 	CircularIndex ci(10, 0, 1);
 // 	for (int i = 0; i < 1000; i++)
