@@ -1,9 +1,9 @@
-#ifndef _VECTOR_H
-#define _VECTOR_H
+#ifndef _VECTOR2D_H
+#define _VECTOR2D_H
 
 #include <cmath>
 
-namespace Vector
+namespace Vector2D
 {
 	template<typename T>
 	class Vec2
@@ -53,12 +53,16 @@ namespace Vector
 			return Vec2<T>(data[0] + _vec.data[0], data[1] + _vec.data[1]);
 		}
 
-		const T dot(const Vec2<typename T>& _vec) const  // this * _vec
+		// this 点乘 _vec
+		const T dot(const Vec2<typename T>& _vec) const  
 		{
 			return (data[0] * _vec.data[0] + data[1] * _vec.data[1]);
 		}
 
-		const T cross(const Vec2<typename T>& _vec) const  // this x _vec， 二维叉积是个值
+		// this 叉乘 _vec， 二维叉积是个值，
+		// 其绝对值是两个向量确定的平行四边形面积，
+		// 其符号表示_vec的末端点在this向量的哪一侧，正表示左侧
+		const T cross(const Vec2<typename T>& _vec) const 
 		{
 			return data[0] * _vec.data[1] - data[1] * _vec.data[0];
 		}
@@ -104,8 +108,8 @@ namespace Vector
 
 }
 
-typedef Vector::Vec2<float> Vec2f;
-typedef Vector::Vec2<double> Vec2d;
+typedef Vector2D::Vec2<float> Vec2f;
+typedef Vector2D::Vec2<double> Vec2d;
 
 #endif
 

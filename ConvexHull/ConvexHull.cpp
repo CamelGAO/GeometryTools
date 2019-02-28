@@ -6,29 +6,40 @@
 #include <vector>
 #include "ConvexHull.h"
 #include "CircularIndex.h"
+#include "RotatingCaliper.h"
 
 using namespace std;
-using namespace Vector;
+using namespace Vector2D;
 using namespace Math;
 using namespace ConvexHull;
+using namespace RotatingCaliper;
 
 int main()
 {
-// 	vector<Vec2f> in, out;
-// 	  
-// 	in.push_back(Vec2f(0, -1));
-// 	in.push_back(Vec2f(1, 0));
-// 	in.push_back(Vec2f(0, 1));
-// 	in.push_back(Vec2f(-1, 0));
-// 	in.push_back(Vec2f(0.5, 0.5));
-// 	in.push_back(Vec2f(-2.0, 0));
-// 
-// 	ConvexHull::getConvexHull(in, out);
-// 
-// 	for (vector<Vec2f>::iterator it = out.begin(); it != out.end(); it++)
-// 	{
-// 		cout << (*it)[0] << " " << (*it)[1] << endl;
-// 	}
+	vector<Vec2f> in, out;
+	  
+	in.push_back(Vec2f(0, -1));
+	in.push_back(Vec2f(1, 0));
+	in.push_back(Vec2f(0, 1));
+	in.push_back(Vec2f(-1, 0));
+	in.push_back(Vec2f(0.5, 0.5));
+	in.push_back(Vec2f(-2.0, 0));
+
+	ConvexHull::getConvexHull(in, out);
+
+	for (vector<Vec2f>::iterator it = out.begin(); it != out.end(); it++)
+	{
+		cout << "ConvexHull point: " << (*it)[0] << " " << (*it)[1] << endl;
+	}
+
+	vector<Vec2f> farthest;
+	cout << "farthest length: " << getFarthestPointToEgde(out, 0, farthest) << endl;
+	for (vector<Vec2f>::iterator it = farthest.begin(); it != farthest.end(); it++)
+	{
+		cout << "farthest point: " << (*it)[0] << " " << (*it)[1] << endl;
+	}
+
+	cout << "ConvexHull width: " << getConvexHullWidthInDirection(out, out[1] - out[0]) << endl;
 
 // 	CircularIndex ci(10, 0, 1);
 // 	for (int i = 0; i < 1000; i++)

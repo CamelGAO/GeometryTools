@@ -21,9 +21,6 @@
     <ClInclude Include="Math.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Vector.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="ConvexHull.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -31,6 +28,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="CircularIndex.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Geometry2D.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2D.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Line2D.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

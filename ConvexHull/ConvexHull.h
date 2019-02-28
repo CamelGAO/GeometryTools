@@ -2,7 +2,7 @@
 #define _CONVEXHULL_H
 
 #include "Math.h"
-#include "Vector.h"
+#include "Vector2D.h"
 #include "CircularIndex.h"
 #include <vector>
 #include <stack>
@@ -12,7 +12,7 @@ namespace ConvexHull
 {
 	using namespace std;
 	using namespace Math;
-	using namespace Vector;
+	using namespace Vector2D;
 
 	class Vec2fYLess
 	{
@@ -127,26 +127,95 @@ namespace ConvexHull
 		_result = _s;
 	}
 
-	//给定凸包上的一条边，找到凸包上到此边距离最远的点
+	//给定凸包上的一条边，找到凸包上到此边距离最远的点，这个距离是垂直距离
 	//_set为凸包，推荐使用getConvexHull函数的返回结果(或者保证凸包中的点逆时针排序,且不存在共线的点)
 	//_start是线段的起点索引，终点是下一个点，_set最后一个点的下一个点是第一个点
-	//_result记录结果，相同结果按照逆时针顺序以此记录
+	//_result记录结果，相同结果按照逆时针顺序以此记录, 最多输出两个结果
 	//返回值为距离，返回值为负表示计算失败
-// 	float getFarthestPointToEgde(const vector<Vec2f>& _set, const int _start, vector<Vec2f>& _result)
-// 	{
-// 		float _ret = -1;
-// 		int _size = _set.size();
-// 		if (_size < 3 || _start >= _size || _start < 0) return _ret;
-// 
-// 		int _end = _start == (_size - 1) ? 0 : (_start + 1);
-// 		Vec2f _edge = _set[_end] - _set[_start];
-// 
-// 		CircularIndex _ci(_size, 0, _size / 2) //由于是逆时针排序的凸包，从_end开始逆时针判定，距离必定先增后减，取折半位置开始判定
-// 		while (1)    
-// 		{
-// 
-// 		}
-// 	}
+	float getFarthestPointToEgde(const vector<Vec2f>& _set, const int _start, vector<Vec2f>& _result)
+	{
+		float _ret = -1;
+		int _size = _set.size();
+		if (_size < 3 || _start >= _size || _start < 0) return _ret;
+
+		CircularIndex _edgeStartIndex(_size, 0, _start);
+		Vec2f _edgeStartPoint = _set[_edgeStartIndex];
+		Vec2f _edgeVector = _set[_edgeStartIndex + 1] - _edgeStartPoint;
+
+		int _direction = 1; //1为逆时针移动  -1为顺时针移动 ，首先逆时针运动
+		bool _equalFlag = false;
+		CircularIndex _ci(_size, 0, _size / 2); //由于是逆时针排序的凸包，从_end开始逆时针判定，距离必定先增后减，取折半位置开始判定
+		while (1)
+		{
+			Vec2f _currentPoint(_set[_ci]);
+			Vec2f _nextPoint(_set[_ci + _direction]);
+
+			float _currentArea = abs(_edgeVector.cross(_currentPoint - _edgeStartPoint));
+			float _nextArea = abs(_edgeVector.cross(_nextPoint - _edgeStartPoint));
+
+			int _sign = sign(_nextArea - _currentArea);
+
+			if (_sign > 0)   //不管什么方向，发现面积上升，继续运动
+			{
+				_ci += _direction;
+				continue;
+			}
+			if (_sign < 0)
+			{
+				if (_direction == 1)   //逆时针发现面积下降，换方向
+				{
+					_direction = -1;
+					continue;
+				}
+				break;     //顺时针发现面积下降，结束，输出当前顶点
+			}
+			_equalFlag = true; //面积相等，结束，需要输出当前顶点和运动方向上的下一个顶点
+			break;
+		}
+
+		if (!_equalFlag)
+		{
+			_result.push_back(_set[_ci]);
+		}
+		else if (_direction == 1)
+		{
+			_result.push_back(_set[_ci]);
+			_result.push_back(_set[_ci + 1]);
+		}
+		else
+		{
+			_result.push_back(_set[_ci - 1]);
+			_result.push_back(_set[_ci]);
+		}
+
+		_ret = abs(_edgeVector.cross(_set[_ci] - _edgeStartPoint)) / _edgeVector.length();
+
+		return _ret;
+	}
+
+	//给定凸包上的一条边，找到凸包在给定方向上的宽度
+	//_set为凸包，推荐使用getConvexHull函数的返回结果(或者保证凸包中的点逆时针排序,且不存在共线的点)
+	//_vec表示方向
+	//返回值为宽度，宽度为负表示计算失败
+	float getConvexHullWidthInDirection(const vector<Vec2f>& _set, const Vec2f& _vec)
+	{
+		float _ret = -1;
+		int _size = _set.size();
+		if (_size < 3) return _ret;
+
+		vector<float> _dotResult;
+		for (vector<Vec2f>::const_iterator it = _set.begin(); it != _set.end(); it++)
+		{
+			float _dot = (*it).dot(_vec);
+			_dotResult.push_back(_dot);
+		}
+
+		float _minDot = *min_element(_dotResult.begin(), _dotResult.end());
+		float _maxDot = *max_element(_dotResult.begin(), _dotResult.end());
+
+		_ret = (_maxDot - _minDot) / _vec.length();
+		return _ret;
+	}
 }
 
 #endif
