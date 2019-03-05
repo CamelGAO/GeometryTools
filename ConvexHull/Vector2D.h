@@ -101,6 +101,11 @@ namespace Vector2D
 			return dot(*this);
 		}
 
+		const T cosAngle(const Vec2<typename T>& _vec) const  //两向量夹角余弦值
+		{
+			return dot(_vec) / length() / _vec.length();
+		}
+
 		T data[2];
 	protected:
 	private:

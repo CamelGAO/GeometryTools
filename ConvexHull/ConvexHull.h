@@ -4,6 +4,7 @@
 #include "Math.h"
 #include "Vector2D.h"
 #include "CircularIndex.h"
+#include "Line2D.h"
 #include <vector>
 #include <stack>
 #include <algorithm>
@@ -13,6 +14,7 @@ namespace ConvexHull
 	using namespace std;
 	using namespace Math;
 	using namespace Vector2D;
+	using namespace Line2D;
 
 	class Vec2fYLess
 	{
@@ -291,7 +293,81 @@ namespace ConvexHull
 		_ret = (_maxDot - _minDot) / _vec.length();
 		return _ret;
 	}
+
+	//给定凸包和由两点确定的直线，判断直线与凸包是否相交
+	//_set为凸包，推荐使用getConvexHull函数的返回结果(或者保证凸包中的点逆时针排序,且不存在共线的点)
+	//_point1, _point2是决定直线的两个点
+	//_intersections是交点，最多有两个。当有两个交点时，首先记录的是从_point1指向_point2的向量上游处的交点。当与一条边重合时，只记录这边的两个端点
+	//返回true相交，false不相交；
+	bool getConvexHullIntersectWithLine(const vector<Vec2f>& _set, const Vec2f& _point1, const Vec2f& _point2, vector<Vec2f>& _intersections)
+	{
+		int _size = _set.size();
+		if (_size < 3 || _point1 == _point2)  return false;
+
+		Vec2f _vec = _point2 - _point1;
+		Line2f _line(_point1, _point2);
+		vector<float > _cross;
+
+		for (int i = 0; i < _size; i++)
+		{
+			Vec2f _temp = _set[i] - _point1;
+			_cross.push_back(_vec.cross(_temp));
+		}
+
+		vector<Vec2f> _tempPoints;
+		CircularIndex _ci(_size);
+		for (int i = 0; i < _size; i++, _ci++)
+		{
+			int _currentSign = sign(_cross[_ci]);
+
+			if (_currentSign == 0)
+			{
+				_tempPoints.push_back(_set[_ci]);
+				continue;
+			}
+
+			int _nextSign = sign(_cross[_ci + 1]);
+
+			if (_currentSign * _nextSign < 0)  //存在交点
+			{
+				Line2f _temp(_set[_ci], _set[_ci + 1]);
+				Vec2f _p;
+				_line.getCrossoverPoint(_temp, _p);  //这里不会出现平行的情况
+				_tempPoints.push_back(_p);
+			}
+		}
+
+		size_t _tempSize = _tempPoints.size();
+		if (_tempSize == 0)
+		{
+			return false;
+		}
+		if (_tempSize > 2)
+		{
+			cout << "ConvexHull::getConvexHullIntersectWithLine(): Too many points!" << endl; //最多两个
+			return false;
+		}
+		if (_tempSize == 2)
+		{
+			Vec2f _temp(_tempPoints[1] - _tempPoints[0]);
+			float _cos = _vec.cosAngle(_temp);
+			if (_cos < 0)
+			{
+				Vec2f _t(_tempPoints[1]);
+				_tempPoints[1] = _tempPoints[0];
+				_tempPoints[0] = _t;
+			}
+		}
+
+		for (size_t i = 0; i < _tempSize; i++)
+			_intersections.push_back(_tempPoints[i]);
+
+		return true;
+
+	}
 }
+
+
 
 #endif
 

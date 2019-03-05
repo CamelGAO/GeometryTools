@@ -66,6 +66,14 @@ int main()
 		cout << "rect point: " << (*it)[0] << " " << (*it)[1] << endl;
 	}
 
+	vector<Vec2f> intersections;
+	Vec2f p3(1, 1), p4(-1,-1);
+	getConvexHullIntersectWithLine(out, p3, p4, intersections);
+	for (vector<Vec2f>::iterator it = intersections.begin(); it != intersections.end(); it++)
+	{
+		cout << "Intersections: " << (*it)[0] << " " << (*it)[1] << endl;
+	}
+
 // 	CircularIndex ci(10, 0, 1);
 // 	for (int i = 0; i < 1000; i++)
 // 	{

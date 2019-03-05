@@ -99,8 +99,8 @@ namespace Line2D
 	private:
 	};
 
-	typedef Line2<float> Line2f;
-	typedef Line2<double> Line2d;
-}
 
+}
+typedef Line2D::Line2<float> Line2f;
+typedef Line2D::Line2<double> Line2d;
 #endif
